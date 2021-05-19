@@ -11,6 +11,7 @@ rng(99)
 % for a mass-spring-damper system based on some data
 
 % written by Russell T Johnson, University of Southern California
+% rtjohnso@usc.edu
 % Last edited: 5/18/21
 
 % This depends on following MCMC package for MATLAB: 
