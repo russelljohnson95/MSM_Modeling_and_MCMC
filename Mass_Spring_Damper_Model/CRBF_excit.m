@@ -1,7 +1,12 @@
 function [excitation] =CRBF_excit(time,muscle)
     % calculate the muscle excitation signal for a single muscle based on
-    % compact radial basis functions. There are 8 functions. 
-
+    % compact radial basis functions. There are 10 basis functions functions. 
+    
+    % Author: Russell T. Johnson, rtjohnso@usc.edu
+    % Last edited: 6-17-21
+    
+    % ---------------------------------------------------
+    
     nNodes = 10; 
     interval = 0.600/(nNodes-1); 
     c = -0.05:interval:0.55;

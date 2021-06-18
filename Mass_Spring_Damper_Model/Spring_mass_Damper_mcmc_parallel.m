@@ -22,7 +22,7 @@ m_real  = 1; % mass
 c_real  = 0.20; % damping 
 k1_real = 3; % stiffness value for region 1
 k2_real = 10; % stiffness value for region 2
-R_real  = 0.03; % threshold to switch from region 1 to region 2
+T_real  = 0.03; % threshold to switch from region 1 to region 2
 x0_real = 0.1; % inital position
 xdot0_real = 0; % initial velocity 
 
@@ -66,7 +66,7 @@ m_var     = 0.30;
 c_var     = 0.08;
 k1_var    = 0.50; 
 k2_var    = 1.00; 
-R_var     = 0.02; 
+T_var     = 0.02; 
 x0_var    = 0.05; 
 xdot0_var = 0.20; 
 
@@ -79,7 +79,7 @@ for j = 1:n_pools
     c_prior(j) = c_real + (prior_center(2,j) * (c_var*prior_noise));
     k1_prior(j) = k1_real + (prior_center(3,j) * (k1_var*prior_noise));
     k2_prior(j) = k2_real + (prior_center(4,j) * (k2_var*prior_noise));
-    R_prior(j) = R_real + (prior_center(5,j) * (R_var*prior_noise));
+    T_prior(j) = T_real + (prior_center(5,j) * (T_var*prior_noise));
     x0_prior(j) = x0_real + (prior_center(6,j) * (x0_var*prior_noise));
     xdot0_prior(j) = xdot0_real  + (prior_center(7,j) * (xdot0_var*prior_noise)); % can't multiply by 0
 end
@@ -90,7 +90,7 @@ for j = 1:n_pools
     c(j)     = c_prior(j) + randn(1,1) * c_var;
     k1(j)    = k1_prior(j) + randn(1,1) * k1_var;
     k2(j)    = k2_prior(j) + randn(1,1) * k2_var;
-    R(j)     = R_prior(j) + randn(1,1) * R_var;
+    T(j)     = T_prior(j) + randn(1,1) * T_var;
     x0(j)    = x0_prior(j) + randn(1,1) * x0_var;
     xdot0(j) = xdot0_prior(j) + randn(1,1) * xdot0_var;
 end
@@ -112,12 +112,12 @@ for j = 1:n_pools
     if k2(j) < 0 
         k2(j) = k2_real + randn(1,1)* 0.1; 
     end
-    if R(j) < 0
-        R(j)  = R_real  + randn(1,1)* 0.1;
+    if T(j) < 0
+        T(j)  = T_real  + randn(1,1)* 0.1;
     end
 end
 
-titles = ["m", "c", "k1", "k2", "R", "x0", "xdot0"];
+titles = ["m", "c", "k1", "k2", "T", "x0", "xdot0"];
 
 for i = 1:n_pools
     params(:,i) = { 
@@ -125,14 +125,14 @@ for i = 1:n_pools
         {'c',    c(i),       0, 10,  c_prior(i),     (c_var*2)}
         {'k1',   k1(i),      0, 50,  k1_prior(i),    (k1_var*2)}
         {'k2',   k2(i),      0, 50,  k2_prior(i),    (k2_var*2)}
-        {'R',    R(i),       0,  2,  R_prior(i),     (R_var*2)}
+        {'T',    T(i),       0,  2,  T_prior(i),     (T_var*2)}
         {'x0',   x0(i)    -2,  2,  x0_prior(i),    (x0_var*2)}
         {'xdot0',xdot0(i),-20, 20, xdot0_prior(i), (xdot0_var*2)}
         };    
 end
 
 % set up the options for mcmcrun 
-options.nsimu = 100;
+options.nsimu = 30000;
 options.stats = 1; 
 options.stats2 = 1; 
 options.waitbar = 0;
@@ -288,12 +288,12 @@ function ydot = SMD_sys(t,y,theta)
     c = theta(2); 
     k1 = theta(3); % stiffness value for region 1
     k2 = theta(4); % stiffness value for region 2
-    R  = theta(5);
+    T  = theta(5);
     
-    if (-R<y(1)) && (y(1)<R)
+    if (-T<y(1)) && (y(1)<T)
         A = [0 1; -k1/m -c/m];
     else 
-        A = [0 1; -(((k1*R)/(abs(y(1)))-(k2*R)/(abs(y(1)))+k2))/m -c/m];
+        A = [0 1; -(((k1*T)/(abs(y(1)))-(k2*T)/(abs(y(1)))+k2))/m -c/m];
     end
     
     ydot = A*y ;

@@ -1,30 +1,35 @@
-% Lets make some plots for a paper! Based on Results from an MCMC run of
-% the spring-mass-damper system
+% Make results plots for the Paper. Calculated from Results from an MCMC run of
+% the mass-spring-damper system
+
+% Author: Russell T. Johnson, rtjohnso@usc.edu
+% Last Edited: 6-18-21
+
+% ---------------------------------------------------
 
 clear
 clc
 close all
 
-% load in results and chains from MCMC run
-load chain_20210505T102404 % 25k iterations
-load results_20210505T102404
+% load results from latest chain
+load chain_20210526T111546 % 30k iterations, 45 mins
+load results_20210526T111546
 
+% specify random number
 rng(99)
 
 % chain is the variable that is saved
-titles = ["m", "c", "k1", "k2", "R", "x0", "xdot0"];
+titles = ["m", "c", "k1", "k2", "T", "x0", "xdot0"];
 n_pools = size(chain,3);
-choose_result = 2;  % select a chain to plot some of the data from 
+choose_result = 2;  % specify which of the runs we want to pull data from 
 n_iter = size(chain,1); 
 burn_in = n_iter*0.5; % specify the burn in 
-
 result_1 = results(:,:,1);
 result_2 = results(:,:,2);
 result_3 = results(:,:,3);
 result_4 = results(:,:,4);
 result_5 = results(:,:,5);
 
-% read in prior from each chain
+% read in prior
 prior_center(1,:) = result_1.prior(:,1);
 prior_width(1,:)  = result_1.prior(:,2); 
 
@@ -41,54 +46,37 @@ prior_center(5,:) = result_5.prior(:,1);
 prior_width(5,:)  = result_5.prior(:,2); 
 
 limits = result_1.limits;
+
+% combine the five (or n_pools #) chains for results
+
 non_burnin = n_iter - burn_in; 
-
-% merge the chains to do analyses 
 chain_full = zeros(non_burnin*n_pools,size(chain,2)); 
-
 for i = 1:n_pools 
     chain_full(1+(non_burnin*(i-1)):non_burnin*i,:) = chain(burn_in+1:end,:,i); 
     
 end
-    
-% first plot the chains to visualize the results
 
-% plot thes chains
-set(gcf,'units','centimeters','Position',[7.5935 4.2863 20 12])
-figure(1);
-for i =1:size(chain,2)
-    subplot(2,4,i)
-    plot(chain(:,i,1),'k')
-    hold on 
-    plot(chain(:,i,2),'b')
-    hold on 
-    plot(chain(:,i,3),'r')
-    hold on 
-    plot(chain(:,i,4),'g')
-    hold on 
-    plot(chain(:,i,5),'c')
-    title(titles{i})
-    xlabel('iteration')
-    ylabel('value')
-end
-
+% plot correlations 
 figure(); clf
-
 set(gcf,'units','centimeters','Position',[7.5935 4.2863 20 14])
 mcmcplot(chain(burn_in+1:end,:,choose_result),[],result_1,'pairs');
 
+options.titles = titles; 
+options.nsimu = size(chain,1); 
+
 nsimu = size(chain,1) - burn_in;
 
-% real model values 
 real = [1, 0.20, 3, 10, 0.03, 0.1, 0];
 
 % --------- Here's the main figure ------------------- % 
+
 figure(99)
 
 set(gcf,'units','centimeters','Position',[7.5935 4.2863 20 14])
 
 ylimmin2 = [0, 0,  0,  0, 0, 0, -1];
 ylimmax2 = [2, 1, 10, 20, .1, .2,  1];
+
 % second row is the chain series from a single chain
 for i = 1:7
     hAx(i) = subplot(5,8,8+i);
@@ -109,7 +97,6 @@ for i = 1:7
     set(hAx(i),'xticklabel',[])
     yMaxValue = max(chain(:,i,choose_result))*1.2; % give the density some space to breathe
     ylim([ ylimmin2(i) ylimmax2(i)]); 
-
     if i == 1
         ylabel('value')
         text(-0.9,1,'B','fontsize',10,'fontweight','bold','units','normalized')
@@ -124,11 +111,12 @@ for i = 1:7
     end
     set(hAx(i),'fontsize',9)
     box off
+
 end
+
 
 xlimmin3 = [0, 0,  0,  0, 0, -.10, -1];
 xlimmax3 = [3, 1, 8, 20, 0.1, 0.4,  1];
-
 % Third row is for the posterior denisty values --
 for i = 1:7
     subplot(5,8,16+i)
@@ -154,6 +142,9 @@ for i = 1:7
     box off
 end 
 
+% First row is the prior density distribution, with the real value and
+% initial value for each parameter
+
 % find the max values in the densities above - in other words - find the
 % peak probability 
 for i = 1:7
@@ -164,13 +155,25 @@ for i = 1:7
 end
 
 % Need to find the standard deviation - which i think this is the best way
-% to do that... It's kind of hacky - but the idea is to integrate the AUC
+% to do that... It's kind of wonky - but the idea is to integrate the AUC
 % of the posterior density, until we get to 34.1%. This sort of assumes
-% that it's a normal distribution, which doesn't hold up exactly. Might ask
-% Dan or even James about this. 
+% that it's a normal distribution, which doesn't hold up exactly. 
 
 integrate = zeros(100,7);
 integrate_sum = zeros(100,7);
+
+for i = 1:7 
+    for j = index(i):100
+        integrate(j-index(i)+1,i) = (x(j,i)-x(j-1,i)) * y(j,i);
+    end
+    integrate_sum(1,i) = integrate(1,i);
+    for k = 2:100
+        integrate_sum(k,i) = integrate_sum(k-1,i)+integrate(k,i);
+    end
+    C(:,i) = integrate_sum(:,i)<0.341;
+    width(i) = index(i) + sum(C(:,i));
+    posterior_std(i) = x(width(i),i)-posterior_center(i);
+end  
 
 xlimit_get = [xlimmin3; xlimmax3];
 init_param = chain(1,:,choose_result);
@@ -178,12 +181,15 @@ init_param = chain(1,:,choose_result);
 
 for i = 1:7
     subplot(5,8,i)
+%     ii  = inds(i);
+%     mus = prior(:,i);
     mu  = prior_center(1,i);
     sig = prior_width(1,i);
     mi  = limits(i,1);
     ma  = limits(i,2);
 
     xlimit=xlimit_get(:,i);
+    % xp = linspace(max(mi,mu-3*sig),min([ma,mu+3*sig,x(end)+xdr]));
     xp = linspace(max(mi,mu-3*sig),min([ma,mu+3*sig]));
     yp = norpf(xp,mu,sig^2);
     yn = nordf((mi-mu)/sig)+1-nordf((ma-mu)/sig); % area outside bounds
@@ -193,6 +199,7 @@ for i = 1:7
     xline(real(i),'r--','LineWidth',1.5);
     ymaxval = max(yp./(1-yn))*1.2;
     ylim([0 ceil(ymaxval)]);
+%     yticks([0 ceil(ymaxval)]);
     set(gca,'ytick',[])
     set(gca,'yticklabel',[])
     set(gca,'fontsize',9)
@@ -247,21 +254,26 @@ end
 
 % do 10 random draws from each chain, then plot the results to see how
 % the results fit the data
-time = 0:0.05:20; % time column
-load('position_4trials_plusnoise.mat')
-
+time = 0:0.05:20; % time column, !! could make more flexible based on input data
+% Load Data from results
+load('position_newmag20.mat')
+load('velocity_newmag20.mat')
+load('position_noise_newmag20.mat')
 for k = 1:size(position_noise,2)
     velocity_noise(:,k) = deriv(position_noise(:,k),0.05);
 end
 
 for k = 1:20
-   draw(k) = randi([burn_in+1 n_iter]);
+   draw(k) = randi([burn_in+1 options.nsimu]);
    Draw_Results(k,:) = chain(draw(k),:,choose_result);
+%        y0 = [2,0];
+%      y0 = [Draw_Results(k,4),0];
    y0(k,:) = [Draw_Results(k,6),Draw_Results(k,7)];
+
    [t(:,k),oscillator(:,k*2-1:k*2)] = ode15s(@SMD_sys,time,y0(k,:),[],Draw_Results(k,:));
 end
 
-% plot the random draws
+% last row -  plot the kinematics from the random draws 
 
 subplot(5,8,35:37)
 for j = 1:19
@@ -287,25 +299,34 @@ xlabel('time (s)')
 ylabel('position (m)')
 
 
+% mechanics functions to calculate the motion of the mass
 function y=SMD_fun(time,theta,y0)
+
+
     [t,y] = ode15s(@SMD_sys,time,y0,[],theta);
+
 end
 
 function ydot = SMD_sys(t,y,theta)
     % ode system function for MCMC mass spring damper example
-   
+    
     m = theta(1);
     c = theta(2); 
     k1 = theta(3); % stiffness value for region 1
     k2 = theta(4); % stiffness value for region 2
     R  = theta(5);
+
     
     if (-R<y(1)) && (y(1)<R)
         A = [0 1; -k1/m -c/m];
     else 
         A = [0 1; -(((k1*R)/(abs(y(1)))-(k2*R)/(abs(y(1)))+k2))/m -c/m];
+
     end
     
     ydot = A*y ;
 
 end
+
+
+

@@ -1,4 +1,10 @@
 function  rank_plot_SMD(chain,options,n_pools)
+% rank plots 
+
+% Author: Russell T. Johnson, rtjohnso@usc.edu
+% Last Edited: 6-18-21
+
+% ---------------------------------------------------
 
 chain_one = chain(:,:,1);
 chain_two = chain(:,:,2);
