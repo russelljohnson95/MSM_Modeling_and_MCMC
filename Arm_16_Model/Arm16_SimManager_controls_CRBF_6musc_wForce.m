@@ -1,5 +1,15 @@
 function [y,muscle_force_out_norm] = Arm16_SimManager_controls_CRBF_6musc_wForce(theta)
-% put some more description here if this all works 
+% written by Russell T Johnson, University of Southern California
+% rtjohnso@usc.edu
+% Last edited: 6/18/2021
+
+% This code takes in the theta (or amplitudes for the CRBFs), computes the
+% corresponding muscle excitations, then uses OpenSim integration to
+% compute the kinematics. 
+
+% this additional code calculates muscle forces as well, this isn't
+% included in the main MCMC run for computational efficiency, but it is
+% used to calculate results after from the random draw analysis
 
 % Import the OpenSim modeling classes
 import org.opensim.modeling.*
@@ -109,19 +119,7 @@ for i = 1:nMuscles
       muscleController.prescribeControlForActuator(i-1,PLF);
 end
 
-
-
 osimState = osimModel.initSystem();
-
-% initActivations(1,1:nMuscles) = 0.02;
-% 
-% muscles = osimModel.getMuscles();
-% for i = 0:nMuscles-1
-%    muscles.get(i).setActivation(osimState, initActivations(i+1));
-%    afl = ActivationFiberLengthMuscle.safeDownCast(muscles.get(i));
-%    afl.setFiberLength(osimState, 0.1);
-%    
-% end
 osimModel.equilibrateMuscles(osimState);
 
 % Record current state values before the simulation runs
@@ -130,8 +128,6 @@ initStates = zeros(numVar,1);
 for i = 0:1:numVar-1
    initStates(i+1,1) = osimState.getY().get(i);
 end
-
-
 
 % Create a Manager to run the simulation
 simulationManager = Manager(osimModel);
@@ -145,7 +141,6 @@ simulationManager.integrate(osimState);
 % Uncomment to write out a states storage file
 % simulationManager.getStateStorage().print('arm16_newnew_states.sto');
 
-
 % Pull out the time and muscle activations
 TimeArray = ArrayDouble();
 StatesArray = ArrayDouble();
@@ -157,8 +152,6 @@ for i = 1:ArrayLength
    Time_SM(i) = TimeArray.getitem(i-1);
 end
 
-% tic 
-
 states = zeros(ArrayLength,Nstates);
 for i = 1:Nstates
    simulationManager.getStateStorage().getDataColumn(i-1,StatesArray);
@@ -166,7 +159,6 @@ for i = 1:Nstates
       states(j,i) = StatesArray.getitem(j-1);
    end
 end
-
 
 Kinematics = zeros(ArrayLength,2);
 for i = 1:2
@@ -201,13 +193,6 @@ for k = 1:nMuscles
     end
 end
 
-
-% position = zeros(ArrayLength,1);
-% simulationManager.getStateStorage().getDataColumn(0,StatesArray);
-% for j = 1:ArrayLength
-%   position(j,1) = StatesArray.getitem(j-1);
-% end
-
 time_int = 0:0.005:0.5; 
 
 muscle_force_out_norm    = interp1(Time_SM,muscle_force_out,time_int);
@@ -218,13 +203,5 @@ y = [time_int',Kinematics_norm];
 
 end
 
-% toc
-% 
-% figure(2)
-% subplot(2,1,1)
-% plot(Time,rad2deg(States(:,1)));
-% 
-% subplot(2,1,2)
-% plot(Time,rad2deg(States(:,2)));
 
 

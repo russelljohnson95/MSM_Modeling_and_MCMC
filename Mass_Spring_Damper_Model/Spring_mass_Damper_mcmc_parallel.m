@@ -1,12 +1,3 @@
-clear
-clc
-close all
-
-user = memory;
-memBefore = user.MemUsedMATLAB;
-
-rng(99)
-
 % run a mcmc algorithm to predict/recover the mass, stiffness, and damping values
 % for a mass-spring-damper system based on some data
 
@@ -16,6 +7,17 @@ rng(99)
 
 % This depends on following MCMC package for MATLAB: 
 % https://mjlaine.github.io/mcmcstat/
+
+% This also uses parallel processing toolbox in Matlab 
+
+clear
+clc
+close all
+
+user = memory;
+memBefore = user.MemUsedMATLAB;
+
+rng(99)
 
 % True Model Values
 m_real  = 1; % mass

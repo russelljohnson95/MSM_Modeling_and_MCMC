@@ -1,12 +1,3 @@
-clear
-clc
-close all
-
-user = memory;
-memBefore = user.MemUsedMATLAB;
-
-rng(99)
-
 % Run a MCMC to find the plausible muscle forces for a reference motion in
 % an elbow musculoskeletal model. This code uses Compact Radial Basis
 % functions to create muscle excitation signals to use with the forward
@@ -19,9 +10,25 @@ rng(99)
 % This depends on following MCMC package for MATLAB: 
 % https://mjlaine.github.io/mcmcstat/
 
-% This also depends on having OpenSim installed and setting up scripting
+% This also depends on having OpenSim 3.3 installed and setting up scripting
 % with Matlab :
 % https://simtk-confluence.stanford.edu/display/OpenSim/Scripting+with+Matlab
+
+% This code doesn't work on OpenSim 4.x versions directly, there are a
+% couple minor coding changes you would have to make, and a few other
+% logistical problems that were run into causing the code to take longer
+% per iteration. 
+
+% This also uses parallel processing toolbox in Matlab 
+
+clear
+clc
+close all
+
+user = memory;
+memBefore = user.MemUsedMATLAB;
+
+rng(99)
 
 n_pools = 5; 
 
@@ -138,10 +145,10 @@ tic
 nameofModel = 'arm16_millard_rigidtendon.osim';
 
 % settings for MCMC
-options.nsimu = 450000;
-options.waitbar = 0;
+options.nsimu = 10; % number of iterations
+options.waitbar = 0; % don't use the waitbar (doesn't work with parallel anyway)
 % define burn-in as a percentage of the number of simulations... 
-burn_in = options.nsimu *0.50;
+burn_in = options.nsimu *0.50; 
 
 % must have parallel tool box installed in matlab - check first!
 check = contains(struct2array(ver), 'Parallel Computing Toolbox');
@@ -166,11 +173,13 @@ delete(poolobj)
 
 %% Analyze and plot the results
 
+% posterior distribution for each parameter, for each chain
 for i = 1:n_pools 
     figure(10+i); clf
     mcmcplot(chain(burn_in:end,:,i),[],results(:,:,i),'denspanel',2);
 end
 
+% chain over iterations 
 for j = 1:n_pools
     figure(20+j);
     for i =1:size(chain,2)
@@ -179,33 +188,35 @@ for j = 1:n_pools
     %     ylim([ 0 1]);
         set(gca,'fontsize',14)
         if i == 1
-            ylabel('excitation')
+            ylabel('amplitude')
             title('Tri long')
         end
         if i == 11
-            ylabel('excitation')
+            ylabel('amplitude')
             title('Tri lat')
         end
         if i == 21
-            ylabel('excitation')
+            ylabel('amplitude')
             title('Tri med')
         end
         if i == 31
-            ylabel('excitation')
+            ylabel('amplitude')
             title('Biceps LH')
         end
         if i == 41
-            ylabel('excitation')
+            ylabel('amplitude')
             title('Biceps SH')
         end
         if i == 51
-            ylabel('excitation')
+            ylabel('amplitude')
             title('Brachialis')
         end
 
     end
 end
 
+% all the chains for all 5 chains - would need to manually change with
+% different number of parallel pools 
 figure(29)
 for i =1:size(chain,2)
     subplot(6,10,i)
@@ -221,8 +232,7 @@ for i =1:size(chain,2)
     xline(burn_in,'LineStyle','--','color',[ 0.4660    0.6740    0.1880],'LineWidth',1.2);
 end
 
-
-% Create the rank plots to check for convergence 
+% Create the rank plots to understand convergence 
 rank_plot_Arm16_10CRBVs_fxn(chain(burn_in:end,:,:))
 
 %% Choose 1 chain and then plot some information from that one
@@ -276,9 +286,7 @@ for i = 1:20
     end
 end
 
-figure()
-histogram(SumIntegExcOut,12);
-
+% muscle excitations for each of the six muscles from the random draws 
 figure(52)
 subplot(2,3,1)
 for i = 1:20
@@ -343,12 +351,15 @@ xlabel('time (s)')
 ylabel('excitation')
 ylim([0 1])
 
+% the sum of squared errors from the results, tracking how well the motion
+% matches the reference data 
 figure(53)
 plot(sschain(:,:,choose),'color', [0.4660 0.6740 0.1880])
 ylabel('ss value')
 xlabel('iteration')
 
-
+% plot the kinematics (positions and velocities) from the random draws
+% versus the reference data 
 
 figure(81)
 subplot(2,1,1)

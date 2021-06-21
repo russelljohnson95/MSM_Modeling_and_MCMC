@@ -1,58 +1,35 @@
-% Plot figures for arm 16 MCMC result
+% Plot a bunch of results figures for Arm 16 MCMC result
+
+% Author: Russell T. Johnson, rtjohnso@usc.edu
+% Last Edited: 6-18-21
+
+% because of the number of random draws and the OpenSim integration,
+% running this code takes a few minutes 
+% ---------------------------------------------------
+
 close all
 clear
 clc
 
-
-% load('Reference_Data_Arm16_Rigid2.mat')
-% 
-% position     = ref_data_rigid.positions;
-% velocity     = ref_data_rigid.velocities;
-
-% Load in the Static Optimization files (states and forces)
-StatOpStates = readmatrix('arm16_pert4_states.sto','FileType','text');
-StatOpForces = readmatrix('arm16_pert4_ForceReporter_forces.sto','FileType','text');
+% Load in the files from the reference motion 
+ReferenceStates = readmatrix('arm16_pert4_states.sto','FileType','text');
+ReferenceForces = readmatrix('arm16_pert4_ForceReporter_forces.sto','FileType','text');
 
 rng(99)
 
-
-% % Load in the Computed Muscle Controls files (states and forces)
-% CMCStates   = readmatrix('arm16_CMC_v3_states.sto','FileType','text');
-% CMCForces   = readmatrix('arm16_CMC_v3_Actuation_force.sto','FileType','text');
-% 
-% % create new time column that takes off the offset that we had to put in
-% % for the CMC algorithm
-% Interval = 2/300;
-% Time = (0:Interval:0.500)';
-% 
-% TimeCMC = 0.03:Interval:0.53;
-% 
-% % Need to downsample and interpolate the CMC data to fit the static optimization
-% CMCStates_Intp = interp1(CMCStates(1:end-1,1),CMCStates(1:end-1,2:end),TimeCMC);
-% CMCForces_Intp = interp1(CMCStates(1:end-1,1),CMCForces(1:end-1,2:end),TimeCMC);
 final_time = 0.5; 
 time_interval2 = final_time/100;
 time_int = (0:time_interval2:final_time)';
 
-time_SO  = StatOpStates(:,1); 
-position = interp1(StatOpStates(:,1),StatOpStates(:,2),time_int);
-velocity = interp1(StatOpStates(:,1),StatOpStates(:,3),time_int);
+time_SO  = ReferenceStates(:,1); 
+position = interp1(ReferenceStates(:,1),ReferenceStates(:,2),time_int);
+velocity = interp1(ReferenceStates(:,1),ReferenceStates(:,3),time_int);
 
-% load chain_results_20201117T012029 %% RUN ONE!!
-% load chain_results_20201118T062322 % Narrow Prior Function
-% load chain_results_20201119T001613 % intermediate Prior Function
-% load chain_results_20201119T225307 
-% load chain_results_20201116T045918
-% load chain_results_20201212T072650 %% RUN TWO!!
-% load chain_results_20210204T235920
+% load results from chain
 load  chain_results_20210304T114654
 
 burn_in = size(chain,1) *0.20;
 options.nsimu = size(chain,1);
-
-
-
-
 
 figure(1)
 
@@ -221,7 +198,7 @@ xticks([0 0.1 0.2 0.3])
 legend('Chain 1','Chain 2','Chain 3','Chain 4','Chain 5','location','northeast')
 legend('boxoff')
 
-SumIntegExcOut_Vector = vertcat(SumIntegExcOut(:,1),SumIntegExcOut(:,2),SumIntegExcOut(:,3),SumIntegExcOut(:,4));
+% SumIntegExcOut_Vector = vertcat(SumIntegExcOut(:,1),SumIntegExcOut(:,2),SumIntegExcOut(:,3),SumIntegExcOut(:,4));
 
 
 figure()
@@ -403,51 +380,6 @@ Muscle_4_traj_std(:,1) = std(force_out(:,4,:),0,[3]);
 Muscle_5_traj_std(:,1) = std(force_out(:,5,:),0,[3]);
 Muscle_6_traj_std(:,1) = std(force_out(:,6,:),0,[3]);
 
-% figure(101)
-% 
-% subplot(3,2,1)
-% [Pa,Li] = JackKnife(time_int,Muscle_1_traj_mean,Muscle_1_traj_std,'k',[0.75, 0.75, 0.75]);
-% ylim([0 600])
-
-% return
-
-% Muscle_draw1_traj_mean = mean(mean(Muscle_draw1_traj,2),3);
-% Muscle_draw2_traj_mean = mean(mean(Muscle_draw2_traj,2),3);
-% Muscle_draw3_traj_mean = mean(mean(Muscle_draw3_traj,2),3);
-% Muscle_draw4_traj_mean = mean(mean(Muscle_draw4_traj,2),3);
-% Muscle_draw5_traj_mean = mean(mean(Muscle_draw5_traj,2),3);
-% Muscle_draw6_traj_mean = mean(mean(Muscle_draw6_traj,2),3);
-% 
-% Muscle_draw1_traj_std = std(Muscle_draw1_traj,0,[2,3]);
-% Muscle_draw2_traj_std = std(Muscle_draw2_traj,0,[2,3]);
-% Muscle_draw3_traj_std = std(Muscle_draw3_traj,0,[2,3]);
-% Muscle_draw4_traj_std = std(Muscle_draw4_traj,0,[2,3]);
-% Muscle_draw5_traj_std = std(Muscle_draw5_traj,0,[2,3]);
-% Muscle_draw6_traj_std = std(Muscle_draw6_traj,0,[2,3]);
-% 
-% Muscle_draw1_traj_std_min = Muscle_draw1_traj_mean - Muscle_draw1_traj_std;
-% Muscle_draw2_traj_std_min = Muscle_draw2_traj_mean - Muscle_draw2_traj_std;
-% Muscle_draw3_traj_std_min = Muscle_draw3_traj_mean - Muscle_draw3_traj_std;
-% Muscle_draw4_traj_std_min = Muscle_draw4_traj_mean - Muscle_draw4_traj_std;
-% Muscle_draw5_traj_std_min = Muscle_draw5_traj_mean - Muscle_draw5_traj_std;
-% Muscle_draw6_traj_std_min = Muscle_draw6_traj_mean - Muscle_draw6_traj_std;
-% 
-% Muscle_draw1_traj_std_min ( Muscle_draw1_traj_std_min < 0 ) = 0;
-% Muscle_draw2_traj_std_min ( Muscle_draw2_traj_std_min < 0 ) = 0;
-% Muscle_draw3_traj_std_min ( Muscle_draw3_traj_std_min < 0 ) = 0;
-% Muscle_draw4_traj_std_min ( Muscle_draw4_traj_std_min < 0 ) = 0;
-% Muscle_draw5_traj_std_min ( Muscle_draw5_traj_std_min < 0 ) = 0;
-% Muscle_draw6_traj_std_min ( Muscle_draw6_traj_std_min < 0 ) = 0;
-% 
-% Muscle_draw1_traj_std_max = Muscle_draw1_traj_mean + Muscle_draw1_traj_std;
-% Muscle_draw2_traj_std_max = Muscle_draw2_traj_mean + Muscle_draw2_traj_std;
-% Muscle_draw3_traj_std_max = Muscle_draw3_traj_mean + Muscle_draw3_traj_std;
-% Muscle_draw4_traj_std_max = Muscle_draw4_traj_mean + Muscle_draw4_traj_std;
-% Muscle_draw5_traj_std_max = Muscle_draw5_traj_mean + Muscle_draw5_traj_std;
-% Muscle_draw6_traj_std_max = Muscle_draw6_traj_mean + Muscle_draw6_traj_std;
-
-
-
 % so take the draw results and concatenate them vertically
 % chain_fromDraw = vertcat(Draw_Results(:,:,1),Draw_Results(:,:,2),Draw_Results(:,:,3),Draw_Results(:,:,4));
 for j = 1:n_pools
@@ -461,205 +393,8 @@ for j = 1:n_pools
     end
 end
 
-% arm16_contourplot_6mus(chain_fromDraw,time,time_int,[],[],[],[],[])
-% arm16_contoutplot_6mus_v2(controls_input,time_int);
 
-% figure()
-% 
-% subplot(2,3,1)
-% [Pa,Li] = JackKnife(time_int,Muscle_1_traj_mean,Muscle_1_traj_std,'k',[0.75, 0.75, 0.75]);
-% hold on 
-% for i = 1:n_draws
-%     h4 = plot(time_int,force_out(:,1,i+3*n_draws),'color',[0.4660, 0.6740, 0.1880],'LineWidth',1.0);
-%     h4.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h1 = plot(time_int,force_out(:,1,i),'color',[0, 0.5, 0],'LineWidth',1.0);
-%     h1.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h2 = plot(time_int,force_out(:,1,i+n_draws,1),'color',[0.75, 0.75, 0],'LineWidth',1.0);
-%     h2.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h3 = plot(time_int,force_out(:,1,i+2*n_draws,1),'color',[0, 0.75, 0.75],'LineWidth',1.0);
-%     h3.Color(4) = 0.15;
-%     hold on 
-% end
-% legend([h1 h2 h3 h4],'Chain 1','Chain 2','Chain 3','Chain 4','Orientation','horizontal')
-% legend('boxoff')
-% box off
-% set(gca,'fontsize',16)
-% title('Triceps Long.')
-% ylabel('Force (N)')
-% ylim([0 800])
-% xlim([0 0.5])
-% 
-% % -----
-% subplot(2,3,2)
-% [Pa,Li] = JackKnife(time_int,Muscle_2_traj_mean,Muscle_2_traj_std,'k',[0.75, 0.75, 0.75]);
-% hold on 
-% for i = 1:n_draws
-%     h4 = plot(time_int,force_out(:,2,i+3*n_draws),'color',[0.4660, 0.6740, 0.1880],'LineWidth',1.0);
-%     h4.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h1 = plot(time_int,force_out(:,2,i),'color',[0, 0.5, 0],'LineWidth',1.0);
-%     h1.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h2 = plot(time_int,force_out(:,2,i+n_draws,1),'color',[0.75, 0.75, 0],'LineWidth',1.0);
-%     h2.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h3 = plot(time_int,force_out(:,2,i+2*n_draws,1),'color',[0, 0.75, 0.75],'LineWidth',1.0);
-%     h3.Color(4) = 0.15;
-%     hold on 
-% end
-% box off
-% set(gca,'fontsize',16)
-% title('Triceps Lat.')
-% % ylabel('Force (N)')
-% ylim([0 625])
-% xlim([0 0.5])
-% 
-% subplot(2,3,3)
-% [Pa,Li] = JackKnife(time_int,Muscle_3_traj_mean,Muscle_3_traj_std,'k',[0.75, 0.75, 0.75]);
-% hold on 
-% for i = 1:n_draws
-%     h4 = plot(time_int,force_out(:,3,i+3*n_draws),'color',[0.4660, 0.6740, 0.1880],'LineWidth',1.0);
-%     h4.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h1 = plot(time_int,force_out(:,3,i),'color',[0, 0.5, 0],'LineWidth',1.0);
-%     h1.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h2 = plot(time_int,force_out(:,3,i+n_draws,1),'color',[0.75, 0.75, 0],'LineWidth',1.0);
-%     h2.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h3 = plot(time_int,force_out(:,3,i+2*n_draws,1),'color',[0, 0.75, 0.75],'LineWidth',1.0);
-%     h3.Color(4) = 0.15;
-%     hold on 
-% end
-% ylim([0 625])
-% xlim([0 0.5])
-% box off
-% set(gca,'fontsize',16)
-% title('Triceps Med.')
-% 
-% 
-% subplot(2,3,4)
-% [Pa,Li] = JackKnife(time_int,Muscle_4_traj_mean,Muscle_4_traj_std,'k',[0.75, 0.75, 0.75]);
-% 
-% hold on 
-% for i = 1:n_draws
-%     h4 = plot(time_int,force_out(:,4,i+3*n_draws),'color',[0.4660, 0.6740, 0.1880],'LineWidth',1.0);
-%     h4.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h1 = plot(time_int,force_out(:,4,i),'color',[0, 0.5, 0],'LineWidth',1.0);
-%     h1.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h2 = plot(time_int,force_out(:,4,i+n_draws,1),'color',[0.75, 0.75, 0],'LineWidth',1.0);
-%     h2.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h3 = plot(time_int,force_out(:,4,i+2*n_draws,1),'color',[0, 0.75, 0.75],'LineWidth',1.0);
-%     h3.Color(4) = 0.15;
-%     hold on 
-% end
-% ylim([0 625])
-% xlim([0 0.5])
-% box off
-% set(gca,'fontsize',16)
-% title('Biceps LH')
-% ylabel('Force (N)')
-% xlabel('time (s)')
-% 
-% 
-% 
-% subplot(2,3,5)
-% [Pa,Li] = JackKnife(time_int,Muscle_5_traj_mean,Muscle_5_traj_std,'k',[0.75, 0.75, 0.75]);
-% 
-% hold on 
-% for i = 1:n_draws
-%     h4 = plot(time_int,force_out(:,5,i+3*n_draws),'color',[0.4660, 0.6740, 0.1880],'LineWidth',1.0);
-%     h4.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h1 = plot(time_int,force_out(:,5,i),'color',[0, 0.5, 0],'LineWidth',1.0);
-%     h1.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h2 = plot(time_int,force_out(:,5,i+n_draws,1),'color',[0.75, 0.75, 0],'LineWidth',1.0);
-%     h2.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h3 = plot(time_int,force_out(:,5,i+2*n_draws,1),'color',[0, 0.75, 0.75],'LineWidth',1.0);
-%     h3.Color(4) = 0.15;
-%     hold on 
-% end
-% ylim([0 500])
-% xlim([0 0.5])
-% box off
-% set(gca,'fontsize',16)
-% title('Biceps SH')
-% % ylabel('Force (N)')
-% xlabel('time (s)')
-% 
-% subplot(2,3,6)
-% [Pa,Li] = JackKnife(time_int,Muscle_6_traj_mean,Muscle_6_traj_std,'k',[0.75, 0.75, 0.75]);
-% 
-% hold on 
-% for i = 1:n_draws
-%     h4 = plot(time_int,force_out(:,6,i+3*n_draws),'color',[0.4660, 0.6740, 0.1880],'LineWidth',1.0);
-%     h4.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h1 = plot(time_int,force_out(:,6,i),'color',[0, 0.5, 0],'LineWidth',1.0);
-%     h1.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h2 = plot(time_int,force_out(:,6,i+n_draws,1),'color',[0.75, 0.75, 0],'LineWidth',1.0);
-%     h2.Color(4) = 0.15;
-%     hold on 
-% end
-% for i = 1:n_draws
-%     h3 = plot(time_int,force_out(:,6,i+2*n_draws,1),'color',[0, 0.75, 0.75],'LineWidth',1.0);
-%     h3.Color(4) = 0.15;
-%     hold on 
-% end
-% ylim([0 1100])
-% xlim([0 0.5])
-% box off
-% set(gca,'fontsize',16)
-% title('Brachialis')
-% % ylabel('Force (N)')
-% xlabel('time (s)')
-
-
-%%
-
+%% main figure
 
 figure(21)
 
@@ -746,23 +481,13 @@ for j = index:100
         integrate(j-index+1) = (pd1(2).XData(j)-pd1(2).XData(j-1)) * pd1(2).YData(j);
 end
 
-% integrate_sum(1) = integrate(1);
-% for k = 2:100
-%     integrate_sum(k) = integrate_sum(k-1)+integrate(k);
-% end
-% C = integrate_sum<0.341;
-% width = index + sum(C);
-% posterior_std = pd(2).XData(width)-posterior_center;
-% 
-% posterior_center
-% posterior_std
-% 
+
 
 % the bottom two rows are for the muscle force trajectories. 
 subplot(3,3,4)
 [Pa,Li] = JackKnife(time_int,Muscle_1_traj_mean,Muscle_1_traj_std,'k',[0.75, 0.75, 0.75]);
 hold on 
-plot(StatOpForces(:,1),StatOpForces(:,2),'r','LineWidth',2)
+plot(ReferenceForces(:,1),ReferenceForces(:,2),'r','LineWidth',2)
 % hold on 
 % plot(Time,(CMCForces_Intp(:,1)),'b','LineWidth',2)
 xlabel('time (s)')
@@ -780,7 +505,7 @@ xticks([0 0.25 0.50])
 subplot(3,3,5)
 [Pa,Li] = JackKnife(time_int,Muscle_2_traj_mean,Muscle_2_traj_std,'k',[0.75, 0.75, 0.75]);
 hold on 
-plot(StatOpForces(:,1),StatOpForces(:,3),'r','LineWidth',2)
+plot(ReferenceForces(:,1),ReferenceForces(:,3),'r','LineWidth',2)
 % hold on 
 % plot(Time,(CMCForces_Intp(:,2)),'b','LineWidth',2)
 xlabel('time (s)')
@@ -798,7 +523,7 @@ xticks([0 0.25 0.50])
 subplot(3,3,6)
 [Pa,Li] = JackKnife(time_int,Muscle_3_traj_mean,Muscle_3_traj_std,'k',[0.75, 0.75, 0.75]);
 hold on 
-h1 = plot(StatOpForces(:,1),StatOpForces(:,4),'r','LineWidth',2);
+h1 = plot(ReferenceForces(:,1),ReferenceForces(:,4),'r','LineWidth',2);
 % hold on 
 % h2 = plot(Time,(CMCForces_Intp(:,3)),'b','LineWidth',2);
 xlabel('time (s)')
@@ -813,7 +538,7 @@ xlim([0 0.5])
 subplot(3,3,7)
 [Pa,Li] = JackKnife(time_int,Muscle_4_traj_mean,Muscle_4_traj_std,'k',[0.75, 0.75, 0.75]);
 hold on 
-plot(StatOpForces(:,1),StatOpForces(:,5),'r','LineWidth',2)
+plot(ReferenceForces(:,1),ReferenceForces(:,5),'r','LineWidth',2)
 % hold on 
 % plot(Time,(CMCForces_Intp(:,4)),'b','LineWidth',2)
 ylim([0 625])
@@ -831,7 +556,7 @@ xticks([0 0.25 0.50])
 subplot(3,3,8)
 [Pa,Li] = JackKnife(time_int,Muscle_5_traj_mean,Muscle_5_traj_std,'k',[0.75, 0.75, 0.75]);
 hold on 
-plot(StatOpForces(:,1),StatOpForces(:,6),'r','LineWidth',2)
+plot(ReferenceForces(:,1),ReferenceForces(:,6),'r','LineWidth',2)
 % hold on 
 % plot(Time,(CMCForces_Intp(:,5)),'b','LineWidth',2)
 ylim([0 500])
@@ -850,7 +575,7 @@ xticks([0 0.25 0.50])
 subplot(3,3,9)
 [Pa,Li] = JackKnife(time_int,Muscle_6_traj_mean,Muscle_6_traj_std,'k',[0.75, 0.75, 0.75]);
 hold on 
-plot(StatOpForces(:,1),StatOpForces(:,7),'r','LineWidth',2)
+plot(ReferenceForces(:,1),ReferenceForces(:,7),'r','LineWidth',2)
 % hold on 
 % plot(Time,(CMCForces_Intp(:,6)),'b','LineWidth',2)
 text(-0.3,1.1,'I','fontsize',10,'fontweight','bold','units','normalized')
@@ -865,203 +590,3 @@ xlim([0 0.5])
 xticks([0 0.25 0.50])
 
 
-
-%%
-return
-
-
-
-figure()
-subplot(2,3,1)
-% [fillhandle,msg]=jbfill(time,Muscle_4_exc_upper',Muscle_4_exc_lower');
-plot(time,muscle_1_controls,'c','LineWidth',2)
-hold on 
-for i = 1:n_draws
-    h4 = plot(time,Muscle_draw1_traj(:,i,4),'color','k','LineWidth',1.5);
-    h4.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h1 = plot(time,Muscle_draw1_traj(:,i,1),'color','r','LineWidth',1.5);
-    h1.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h2 = plot(time,Muscle_draw1_traj(:,i,2),'color','b','LineWidth',1.5);
-    h2.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h3 = plot(time,Muscle_draw1_traj(:,i,3),'color','g','LineWidth',1.5);
-    h3.Color(4) = 0.33;
-    hold on 
-end
-
-legend([h1 h2 h3 h4],'Chain 1','Chain 2','Chain 3','Chain 4','Orientation','horizontal')
-legend('boxoff')
-box off
-set(gca,'fontsize',16)
-title('Triceps Long.')
-xticks([0 0.25 0.50])
-ylabel('excitation')
-ylim([0 1])
-
-subplot(2,3,2)
-% [fillhandle,msg]=jbfill(time,Muscle_5_exc_upper',Muscle_5_exc_lower');
-plot(time,muscle_2_controls,'b','LineWidth',2)
-hold on 
-for i = 1:n_draws
-    h4 = plot(time,Muscle_draw2_traj(:,i,4),'color','k','LineWidth',1.5);
-    h4.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h1 = plot(time,Muscle_draw2_traj(:,i,1),'color','r','LineWidth',1.5);
-    h1.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h2 = plot(time,Muscle_draw2_traj(:,i,2),'color','b','LineWidth',1.5);
-    h2.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h3 = plot(time,Muscle_draw2_traj(:,i,3),'color','g','LineWidth',1.5);
-    h3.Color(4) = 0.33;
-    hold on 
-end
-box off
-set(gca,'fontsize',16)
-title('Triceps Lat.')
-xticks([0 0.25 0.50])
-% ylabel('excitation')
-ylim([0 1])
-
-subplot(2,3,3)
-% [fillhandle,msg]=jbfill(time,Muscle_6_exc_upper',Muscle_6_exc_lower');
-plot(time,muscle_3_controls,'b','LineWidth',2)
-hold on 
-for i = 1:n_draws
-    h4 = plot(time,Muscle_draw3_traj(:,i,4),'color','k','LineWidth',1.5);
-    h4.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h1 = plot(time,Muscle_draw3_traj(:,i,1),'color','r','LineWidth',1.5);
-    h1.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h2 = plot(time,Muscle_draw3_traj(:,i,2),'color','b','LineWidth',1.5);
-    h2.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h3 = plot(time,Muscle_draw3_traj(:,i,3),'color','g','LineWidth',1.5);
-    h3.Color(4) = 0.33;
-    hold on 
-end
-box off
-set(gca,'fontsize',16)
-title('Triceps Med.')
-xticks([0 0.25 0.50])
-% xlabel('time (s)')
-% ylabel('excitation')
-ylim([0 1])
-
-
-subplot(2,3,4)
-% [fillhandle,msg]=jbfill(time,Muscle_4_exc_upper',Muscle_4_exc_lower');
-plot(time,muscle_4_controls,'b','LineWidth',2)
-hold on 
-for i = 1:n_draws
-    h4 = plot(time,Muscle_draw4_traj(:,i,4),'color','k','LineWidth',1.5);
-    h4.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h1 = plot(time,Muscle_draw4_traj(:,i,1),'color','r','LineWidth',1.5);
-    h1.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h2 = plot(time,Muscle_draw4_traj(:,i,2),'color','b','LineWidth',1.5);
-    h2.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h3 = plot(time,Muscle_draw4_traj(:,i,3),'color','g','LineWidth',1.5);
-    h3.Color(4) = 0.33;
-    hold on 
-end
-box off
-set(gca,'fontsize',16)
-title('Biceps LH')
-ylabel('excitation')
-xticks([0 0.25 0.50])
-xlabel('time (s)')
-ylim([0 1])
-
-subplot(2,3,5)
-% [fillhandle,msg]=jbfill(time,Muscle_5_exc_upper',Muscle_5_exc_lower');
-plot(time,muscle_5_controls,'b','LineWidth',2)
-hold on 
-for i = 1:n_draws
-    h4 = plot(time,Muscle_draw5_traj(:,i,4),'color','k','LineWidth',1.5);
-    h4.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h1 = plot(time,Muscle_draw5_traj(:,i,1),'color','r','LineWidth',1.5);
-    h1.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h2 = plot(time,Muscle_draw5_traj(:,i,2),'color','b','LineWidth',1.5);
-    h2.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h3 = plot(time,Muscle_draw5_traj(:,i,3),'color','g','LineWidth',1.5);
-    h3.Color(4) = 0.33;
-    hold on 
-end
-box off
-set(gca,'fontsize',16)
-title('Biceps SH')
-xlabel('time (s)')
-xticks([0 0.25 0.50])
-% ylabel('excitation')
-ylim([0 1])
-
-subplot(2,3,6)
-% [fillhandle,msg]=jbfill(time,Muscle_6_exc_upper',Muscle_6_exc_lower');
-plot(time,muscle_6_controls,'b','LineWidth',2)
-hold on 
-for i = 1:n_draws
-    h4 = plot(time,Muscle_draw6_traj(:,i,4),'color','k','LineWidth',1.5);
-    h4.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h1 = plot(time,Muscle_draw6_traj(:,i,1),'color','r','LineWidth',1.5);
-    h1.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h2 = plot(time,Muscle_draw6_traj(:,i,2),'color','b','LineWidth',1.5);
-    h2.Color(4) = 0.33;
-    hold on 
-end
-for i = 1:n_draws
-    h3 = plot(time,Muscle_draw6_traj(:,i,3),'color','g','LineWidth',1.5);
-    h3.Color(4) = 0.33;
-    hold on 
-end
-box off
-set(gca,'fontsize',16)
-title('Brachialis')
-xlabel('time (s)')
-xticks([0 0.25 0.50])
-% ylabel('excitation')
-ylim([0 1])
