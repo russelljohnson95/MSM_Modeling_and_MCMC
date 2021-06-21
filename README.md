@@ -1,5 +1,5 @@
 # MSM_Modeling_and_MCMC
-Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, this repository also includes an implementation of the MCMC algorithm with a mass-spring-damper model. 
+Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, this repository also includes an implementation of the MCMC algorithm with a mass-spring-damper model. This requires the appropriate set up of the DRAM MCMC matlab algorithm (see below) and parallel computing tool box in Matlab. Additionally, for the Arm 16 model, it requires appropriate set up of OpenSim 3.3 with Matlab scripting (see below). 
 
 {TODO: add reference to paper}
 
