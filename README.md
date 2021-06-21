@@ -1,10 +1,10 @@
 # MSM_Modeling_and_MCMC
 Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, and includes an implementation of the MCMC algorithm with a mass-spring-damper model. 
 
-DRAM_MCMC_Matlab: 
+# DRAM_MCMC_Matlab: 
 This is the Matlab implementation of the DRAM MCMC algorithm used with this project. It was obtained from this github: https://github.com/mjlaine/mcmcstat and documented further here: https://mjlaine.github.io/mcmcstat/#orgcdeadeb. Presented here with light edits, mostly for formatting purposes. Users will need to make sure these files are in their Matlab path to run MCMC for either the . 
 
-Mass_Spring_Damper_Model: 
+# Mass_Spring_Damper_Model: 
 This folder runs an MCMC analysis to recover the parameters of a mass-spring-damper system, with a variable-stiffness spring. 
 
 deriv: A function that finds the derivative of a time series trajectory, used to find velocity from position data of the mass. 
