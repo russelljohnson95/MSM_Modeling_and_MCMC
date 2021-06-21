@@ -257,8 +257,8 @@ end
 time = 0:0.05:20; % time column, !! could make more flexible based on input data
 % Load Data from results
 load('position_newmag20.mat')
-load('velocity_newmag20.mat')
-load('position_noise_newmag20.mat')
+% load('velocity_newmag20.mat')
+load('position_4trials_plusnoise.mat')
 for k = 1:size(position_noise,2)
     velocity_noise(:,k) = deriv(position_noise(:,k),0.05);
 end
