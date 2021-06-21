@@ -4,7 +4,7 @@ Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskel
 {TODO: add reference to paper}
 
 # DRAM_MCMC_Matlab: 
-This is the Matlab implementation of the DRAM MCMC algorithm used with this project. It was obtained from this github: https://github.com/mjlaine/mcmcstat and documented further here: https://mjlaine.github.io/mcmcstat/#orgcdeadeb. Presented here with light edits, mostly for formatting purposes. Users will need to make sure these files are in their Matlab path to run MCMC for either the . 
+This is the Matlab implementation of the DRAM MCMC algorithm used with this project. It was obtained from this github: https://github.com/mjlaine/mcmcstat and documented further here: https://mjlaine.github.io/mcmcstat/#orgcdeadeb. Presented here with light edits, mostly for formatting purposes. Users will need to make sure these files are in their Matlab path to run MCMC for either the Mass Spring Damper model or Arm 16 model. 
 
 # Mass_Spring_Damper_Model: 
 This folder runs an MCMC analysis to recover the parameters of a mass-spring-damper system, with a variable-stiffness spring. 
