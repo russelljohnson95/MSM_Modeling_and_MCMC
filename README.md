@@ -1,5 +1,7 @@
 # MSM_Modeling_and_MCMC
-Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, and includes an implementation of the MCMC algorithm with a mass-spring-damper model. 
+Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, this repository also includes an implementation of the MCMC algorithm with a mass-spring-damper model. 
+
+{add reference to paper}
 
 # DRAM_MCMC_Matlab: 
 This is the Matlab implementation of the DRAM MCMC algorithm used with this project. It was obtained from this github: https://github.com/mjlaine/mcmcstat and documented further here: https://mjlaine.github.io/mcmcstat/#orgcdeadeb. Presented here with light edits, mostly for formatting purposes. Users will need to make sure these files are in their Matlab path to run MCMC for either the . 
@@ -24,7 +26,7 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 **Also included:** position and velocity data used with manuscript and for plotting. Also, sample MCMC results chain_20210526T111546 and results_20210526T111546
 
 # Arm_16_Model 
-This folder runs an MCMC analysis to find the plausible muscle forces for a elbow flexion model in OpenSim. This uses compact radial basis functions (CRBFs) to represent muscle excitations, that then get forward integrated using OpenSim to simulate the motion of the model during each iteration.  
+This folder runs an MCMC analysis to find the plausible muscle forces for a elbow flexion model in OpenSim. This uses compact radial basis functions (CRBFs) to represent muscle excitations, that then get forward integrated using OpenSim to simulate the motion of the model during each iteration. **_IMPORTANT_** You must have OpenSim 3.3 installed on your computer to run this code, with the API in MATLAB set up. See: https://simtk-confluence.stanford.edu/display/OpenSim33/Scripting+with+Matlab . This set up does NOT work with OpenSim 4.0 or later due to scripting changes. 
 
 **Arm16_CRBF_6musc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
