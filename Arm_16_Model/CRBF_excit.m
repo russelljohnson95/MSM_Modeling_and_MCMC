@@ -8,15 +8,18 @@ function [excitation] =CRBF_excit(time,muscle)
     
     nNodes = 10; 
     interval = 0.600/(nNodes-1); 
-    c = -0.05:interval:0.55;
-    w = interval*1.33;
-
+    c = -0.05:interval:0.55; % centers of each CRBF
+    w = interval*1.33; % preset widths of CRBFs
+    
+    % calculate CRBFs 
     for j = 1:nNodes
         output(:,j) = muscle(j).*bumpfun(time,c(j),w);
     end
-
-    raw_out = sum(output,2); % +constant; There's an option to add a constant to shift, but I think as long as the parameters can be negative, we don't need these values 
-
+    
+    % sumCRBFs
+    raw_out = sum(output,2); %  
+    
+    % logit transform
     for i = 1:length(raw_out)
         if raw_out(i)>0 
             excitation(i) = 1./(1+exp(-raw_out(i)));

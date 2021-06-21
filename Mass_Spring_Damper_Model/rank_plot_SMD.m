@@ -1,6 +1,8 @@
 function  rank_plot_SMD(chain,options,n_pools)
 % rank plots 
 
+% called by Spring_mass_Damper_mcmc_parallel.m 
+
 % Author: Russell T. Johnson, rtjohnso@usc.edu
 % Last Edited: 6-18-21
 

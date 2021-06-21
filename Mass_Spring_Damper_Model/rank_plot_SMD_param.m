@@ -1,6 +1,8 @@
 function  rank = rank_plot_SMD_param(chain,n_pools)
 % rank plots but for one parameter at a time
 
+% called by Figure_Manuscript_fromChain.m
+
 % Author: Russell T. Johnson, rtjohnso@usc.edu
 % Last Edited: 6-18-21
 
