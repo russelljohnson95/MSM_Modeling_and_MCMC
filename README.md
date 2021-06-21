@@ -1,5 +1,5 @@
 # MSM_Modeling_and_MCMC
-Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, this repository also includes an implementation of the MCMC algorithm with a mass-spring-damper model. This requires the appropriate set up of the DRAM MCMC matlab algorithm (see below) and parallel computing tool box in Matlab. Additionally, for the Arm 16 model, it requires appropriate set up of OpenSim 3.3 with Matlab scripting (see below). 
+Workflow for performing Markov Chain Monte Carlo analyses on OpenSim musculoskeletal models, this repository also includes an implementation of the MCMC algorithm with a mass-spring-damper model. This requires the appropriate set up of the DRAM MCMC matlab algorithm (see below) and parallel computing tool box in Matlab. Additionally, for the Arm 16 model, it requires appropriate set up of OpenSim 3.3 with MATLAB scripting API (see below). 
 
 {TODO: add reference to paper}
 
@@ -26,9 +26,9 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 **Also included:** position and velocity data used with manuscript and for plotting. Also, sample MCMC results chain_20210526T111546 and results_20210526T111546
 
 ## Arm_16_Model 
-This folder runs an MCMC analysis to find the plausible muscle forces for a elbow flexion model in OpenSim. This uses compact radial basis functions (CRBFs) to represent muscle excitations, that then get forward integrated using OpenSim to simulate the motion of the model during each iteration. 
+This folder runs an MCMC analysis to find the plausible muscle forces for a elbow flexion model (arm16_millard_rigidtendon.osim) in OpenSim. This uses compact radial basis functions (CRBFs) to represent muscle excitations, that then get forward integrated using OpenSim to simulate the motion of the model during each iteration. 
 
-**_IMPORTANT_** You must have OpenSim 3.3 installed on your computer to run this code, with the API in MATLAB set up. See: https://simtk-confluence.stanford.edu/display/OpenSim33/Scripting+with+Matlab . This set up does NOT work with OpenSim 4.0 or later due to scripting changes. 
+**_IMPORTANT_** You must have OpenSim 3.3 installed on your computer to run the model associated with this code, with the MATLAB scripting API set up. See: https://simtk-confluence.stanford.edu/display/OpenSim33/Scripting+with+Matlab . This set up does NOT work with OpenSim 4.0 or later due to scripting changes. 
 
 **Arm16_CRBF_6musc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
@@ -50,4 +50,4 @@ This folder runs an MCMC analysis to find the plausible muscle forces for a elbo
 
 **arm16_pert4_:** Reference data for the MCMC analysis. 
 
-Not included (right now) are the sample data from the MCMC run for this project - the file size is too big for GitHub... 
+TODO: Not included (right now) are the sample data from the MCMC run for this project - the file size is too big for GitHub... 
