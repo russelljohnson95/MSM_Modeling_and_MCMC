@@ -45,3 +45,5 @@ This folder runs an MCMC analysis to find the plausible muscle forces for a elbo
 **arm16_millard_rigidtendon.osim:** Arm model used for this project with 6 muscles and 1 mechanical degree-of-freedom at the elbow. 
 
 **arm16_pert4_:** Reference data for the MCMC analysis. 
+
+Not included (right now) are the sample data from the MCMC run for this project - the file size is too big for GitHub... 
