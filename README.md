@@ -12,6 +12,8 @@ This is the Matlab implementation of the DRAM MCMC algorithm used with this proj
 ## Mass_Spring_Damper_Model: 
 This folder runs an MCMC analysis to recover the parameters of a mass-spring-damper system, with a variable-stiffness spring. 
 
+--------------------------- List of files and a short description of each of them --------------------------------- 
+
 **deriv:** A function that finds the derivative of a time series trajectory, used to find velocity from position data of the mass. 
 
 **effective_sample_sizeCalc:** A script that calculates the R-hat and effective sample size of the MCMC results 
@@ -26,12 +28,14 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 
 **Spring_mass_Damper_mcmc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
-**Also included:** position and velocity data used with manuscript and for plotting. Also, sample MCMC results chain_20210526T111546 and results_20210526T111546
+**Also included:** position data (with and without noise) used to track mass oscillations in MCMC and used for plotting. Also, sample MCMC results chain_20210526T111546 and results_20210526T111546
 
 ## Arm_16_Model 
 This folder runs an MCMC analysis to find the plausible muscle forces for a elbow flexion model (arm16_millard_rigidtendon.osim) in OpenSim. This uses compact radial basis functions (CRBFs) to represent muscle excitations, that then get forward integrated using OpenSim to simulate the motion of the model during each iteration. 
 
-**_IMPORTANT_** You must have OpenSim 3.3 installed on your computer to run the model associated with this code, with the MATLAB scripting API set up. See: https://simtk-confluence.stanford.edu/display/OpenSim33/Scripting+with+Matlab . This set up does NOT work with OpenSim 4.0 or later due to scripting changes. 
+**_IMPORTANT_** You must have OpenSim 3.3 installed (see download under "Previous Releases" on this page: https://simtk.org/frs/index.php?group_id=91) on your computer to run the model associated with this code, with the MATLAB scripting API set up. To set up API, see: https://simtk-confluence.stanford.edu/display/OpenSim33/Scripting+with+Matlab . This set up does NOT work with OpenSim 4.0 or later due to scripting changes. 
+
+--------------------------- List of files and a short description of each of them --------------------------------- 
 
 **Arm16_CRBF_6musc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
