@@ -50,19 +50,19 @@ This folder runs an MCMC analysis to find the plausible muscle forces for a elbo
 
 * **Arm16_CRBF_6musc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
-* **Arm16_Figure_FromChains:** A script that plots seen in the manuscript from the MCMC results for the elbow model 
+* **Arm16_Figure_FromChains:** A script that plots seen in the manuscript from the MCMC results for the elbow model.
 
-* **Arm16_SimManager_controls_CRBF_6musc:** This function uses the muscle excitation signals to simulate the motion of the Elbow Model via OpenSim. It returns the positions and velocities of the elbow joint angle to the script Arm16_CRBF_6musc_parallel.m
+* **Arm16_SimManager_controls_CRBF_6musc:** This function uses the muscle excitation signals to simulate the motion of the Elbow Model via OpenSim. It returns the positions and velocities of the elbow joint angle to the script `Arm16_CRBF_6musc_parallel.m`.
 
-* **Arm16_SimManager_controls_CRBF_6musc_wForce:** This function uses the muscle excitation signals to simulate the motion of the Elbow Model via OpenSim. It returns the positions and velocities of the elbow joint angle AND the muscle forces from each of the muscles in the model to the script Arm16_Figure_FromChains.m
+* **Arm16_SimManager_controls_CRBF_6musc_wForce:** This function uses the muscle excitation signals to simulate the motion of the Elbow Model via OpenSim. It returns the positions and velocities of the elbow joint angle AND the muscle forces from each of the muscles in the model to the script `Arm16_Figure_FromChains.m`.
 
-* **CRBF_excit:** This function takes the CRBF amplitudes from the MCMC run and calculates the muscle excitation signal for a muscle. It uses compact radial basis functions then transforms it via a logit transform to put them onto a scale from 0 to 1. It gets called by both Arm16_SimManager_controls_CRBF_6musc.m and Arm16_SimManager_controls_CRBF_6musc_wForce.m 
+* **CRBF_excit:** This function takes the CRBF amplitudes from the MCMC run and calculates the muscle excitation signal for a muscle. It uses compact radial basis functions then transforms it via a logit transform to put them onto a scale from 0 to 1. It gets called by both `Arm16_SimManager_controls_CRBF_6musc.m` and `Arm16_SimManager_controls_CRBF_6musc_wForce.m`.
 
-* **effective_sample_sizeCalc_Elbow:**  A script that calculates the R-hat and effective sample size of the MCMC results for the elbow model
+* **effective_sample_sizeCalc_Elbow:**  A script that calculates the R-hat and effective sample size of the MCMC results for the elbow model.
 
-* **rank_plot_Arm16_10CRBVs_fxn:** A function that helps calculate the rank plots of each muscle, called by Arm16_Figure_FromChains.m and Arm16_CRBF_6musc_parallel.m
+* **rank_plot_Arm16_10CRBVs_fxn:** A function that helps calculate the rank plots of each muscle, called by `Arm16_Figure_FromChains.m` and `Arm16_CRBF_6musc_parallel.m`.
 
-* **rank_plot_muscle_10node:** A function that calculates the rank plots of each muscle, called by rank_plot_Arm16_10CRBVs_fxn.m
+* **rank_plot_muscle_10node:** A function that calculates the rank plots of each muscle, called by `rank_plot_Arm16_10CRBVs_fxn.m`.
 
 * **arm16_millard_rigidtendon.osim:** Arm model used for this project with 6 muscles and 1 mechanical degree-of-freedom at the elbow. 
 
