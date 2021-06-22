@@ -18,7 +18,7 @@ The MATLAB implementation of the DRAM MCMC Algorithm used with this project. Use
 
 These files were obtained from Marko Laine's [`mcmcstat` Repository](https://github.com/mjlaine/mcmcstat) on Sept. 3rd, 2019, and are documented further [here](https://mjlaine.github.io/mcmcstat/#orgcdeadeb).
 
-The are presented here with light edits, mostly for formatting purposes. 
+They are presented here with light edits, mostly for formatting purposes. 
 
 ## Mass_Spring_Damper_Model: 
 This folder runs an MCMC analysis to recover the parameters of a mass-spring-damper system, with a variable-stiffness spring. See Supplementary Material paper for full description of model and algorithm. 
