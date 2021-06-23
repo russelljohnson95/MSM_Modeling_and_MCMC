@@ -31,13 +31,13 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 
 * **deriv:** A function that finds the derivative of a time series trajectory, used to find velocity from position data of the mass. 
 
-* **effective_sample_sizeCalc:** A script that calculates the R-hat and effective sample size of the MCMC results.
+* **Effective_Sample_Size_MSD:** A script that calculates the R-hat and effective sample size of the MCMC results.
 
 * **Figure_Manuscript_fromChain:** A script that plots seen in the manuscript from the MCMC results.
 
-* **rank_plot_SMD:** A function that calculates and plots the rank of the results, called by the script `Spring_mass_Damper_mcmc_parallel.m`.
+* **rank_plot_MSD:** A function that calculates and plots the rank of the results, called by the script `Spring_mass_Damper_mcmc_parallel.m`.
 
-* **rank_plot_SMD_param:** A function that calculates and plots the rank of the results for a single parameter at a time, called by the script `Figure_Manuscript_fromChain.m`.
+* **rank_plot_MSD_param:** A function that calculates and plots the rank of the results for a single parameter at a time, called by the script `Figure_Manuscript_fromChain.m`.
 
 #### **Also Included:**
 * Position data (with and without noise) used to track mass oscillations in MCMC and used for plotting.
