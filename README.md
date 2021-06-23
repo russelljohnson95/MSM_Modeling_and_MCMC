@@ -48,7 +48,7 @@ This folder runs an MCMC analysis to find the plausible muscle forces for a elbo
 
 ### Project Files Description
 
-* **Arm16_CRBF_6musc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
+* **Arm16_CRBF_6musc_mcmc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
 * **Arm16_Figure_FromChains:** A script that plots seen in the manuscript from the MCMC results for the elbow model.
 
