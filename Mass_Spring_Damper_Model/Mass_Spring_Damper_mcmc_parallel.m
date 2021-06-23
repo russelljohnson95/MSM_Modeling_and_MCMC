@@ -47,7 +47,7 @@ data.ydata = [time',position_noise,velocity_noise];
 
 %% Create Model
 
-model.ssfun = @SMD_SS;
+model.ssfun = @MSD_SS;
 
 %% this is the part where we do the parallelization
 % must have parallel tool box installed in matlab - check first!
@@ -134,7 +134,7 @@ for i = 1:n_pools
 end
 
 % set up the options for mcmcrun 
-options.nsimu = 30000;
+options.nsimu = 100;
 options.stats = 1; 
 options.stats2 = 1; 
 options.waitbar = 0;
@@ -239,7 +239,7 @@ for i = 1:n_pools
 end 
 
 % Plot the rank without the first burn in 
-rank_plot_SMD(chain(burn_in:end,:,:),options,n_pools);
+rank_plot_MSD(chain(burn_in:end,:,:),options,n_pools);
 
 % save the chains so that we can do other analysss later if we want
 filename = ['chain_',datestr(now,'yyyymmddTHHMMSS'),'.mat'];
@@ -260,7 +260,7 @@ disp('   ')
 
 %% End of main function, begin other functions
 
-function ss = SMD_SS(theta,data)
+function ss = MSD_SS(theta,data)
     % sum of squares function for the posterior probability 
 
     time   = data.xdata;
@@ -268,7 +268,7 @@ function ss = SMD_SS(theta,data)
 
     y0 = [theta(6),theta(7)];
     
-    ymodel = SMD_fun(time,theta,y0);
+    ymodel = MSD_fun(time,theta,y0);
     n_trials = 4; 
     
     for i = 1:n_trials
@@ -277,13 +277,13 @@ function ss = SMD_SS(theta,data)
     ss = sum(sumsquare);
 end
 
-function y=SMD_fun(time,theta,y0)
+function y=MSD_fun(time,theta,y0)
     % integration of the mass spring damper system 
-    [t,y] = ode15s(@SMD_sys,time,y0,[],theta);
+    [t,y] = ode15s(@MSD_sys,time,y0,[],theta);
 
 end
 
-function ydot = SMD_sys(t,y,theta)
+function ydot = MSD_sys(t,y,theta)
     % ode system function for MCMC mass spring damper example
     
     m = theta(1);

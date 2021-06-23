@@ -1,7 +1,8 @@
 % Plot a bunch of results figures for Arm 16 MCMC result
 
-% Author: Russell T. Johnson, rtjohnso@usc.edu
-% Last Edited: 6-18-21
+% Author: Russell T. Johnson, rtjohnso@usc.edu, University of Southern
+% California
+% Last Edited: 6-23-21
 
 % because of the number of random draws and the OpenSim integration,
 % running this code takes a few minutes 

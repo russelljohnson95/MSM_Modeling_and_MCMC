@@ -224,7 +224,7 @@ end
 % Forth row is to show convergence across 5 chains. 
 for i = 1:7
     %calculate the rank for each parameter 
-    rank = rank_plot_SMD_param(chain(burn_in+1:end,i,:),n_pools);
+    rank = rank_plot_MSD_param(chain(burn_in+1:end,i,:),n_pools);
       
     subplot(5,8,24+i)
     set(gca,'fontsize',16)
@@ -269,7 +269,7 @@ for k = 1:20
 %      y0 = [Draw_Results(k,4),0];
    y0(k,:) = [Draw_Results(k,6),Draw_Results(k,7)];
 
-   [t(:,k),oscillator(:,k*2-1:k*2)] = ode15s(@SMD_sys,time,y0(k,:),[],Draw_Results(k,:));
+   [t(:,k),oscillator(:,k*2-1:k*2)] = ode15s(@MSD_sys,time,y0(k,:),[],Draw_Results(k,:));
 end
 
 % last row -  plot the kinematics from the random draws 
@@ -299,14 +299,14 @@ ylabel('position (m)')
 
 
 % mechanics functions to calculate the motion of the mass
-function y=SMD_fun(time,theta,y0)
+function y=MSD_fun(time,theta,y0)
 
 
-    [t,y] = ode15s(@SMD_sys,time,y0,[],theta);
+    [t,y] = ode15s(@MSD_sys,time,y0,[],theta);
 
 end
 
-function ydot = SMD_sys(t,y,theta)
+function ydot = MSD_sys(t,y,theta)
     % ode system function for MCMC mass spring damper example
     
     m = theta(1);

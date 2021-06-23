@@ -25,6 +25,7 @@ timestep = 0.05;
 time   = tInit:timestep:tFinal;
 
 displacement = (0:0.01:.2);
+force = zeros(
 for i = 1:length(displacement)
     if abs(displacement(i)) < T
         force(i) = displacement(i)*k1;
