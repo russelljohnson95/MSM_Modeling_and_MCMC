@@ -22,7 +22,7 @@ titles = ["m", "c", "k1", "k2", "T", "x0", "xdot0"];
 n_pools = size(chain,3);
 choose_result = 2;  % specify which of the runs we want to pull data from 
 n_iter = size(chain,1); 
-burn_in = n_iter*0.5; % specify the burn in 
+burn_in = n_iter*0.50; % specify the burn in 
 result_1 = results(:,:,1);
 result_2 = results(:,:,2);
 result_3 = results(:,:,3);
@@ -258,8 +258,8 @@ time = 0:0.05:20; % time column, !! could make more flexible based on input data
 % Load Data from results
 load('position_newmag20.mat')
 load('position_4trials_plusnoise.mat')
-for k = 1:size(position_noise,2)
-    velocity_noise(:,k) = deriv(position_noise(:,k),0.05);
+for i = 1:size(position_noise,2)
+    velocity_noise(:,i) = deriv(position_noise(:,i),0.05);
 end
 
 for k = 1:20
