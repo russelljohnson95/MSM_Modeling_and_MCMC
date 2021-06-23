@@ -27,6 +27,8 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 
 * **Spring_mass_Damper_mcmc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
+* **Spring_mass_Damper:** If you want to generate new reference data, this script that will generate kinematics for the mass-spring-damper system. In this script, you can set up the "true" parameters of the system, and simulate the oscillation of the mass over a set period of time. 
+
 * **deriv:** A function that finds the derivative of a time series trajectory, used to find velocity from position data of the mass. 
 
 * **effective_sample_sizeCalc:** A script that calculates the R-hat and effective sample size of the MCMC results.
@@ -37,11 +39,9 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 
 * **rank_plot_SMD_param:** A function that calculates and plots the rank of the results for a single parameter at a time, called by the script `Figure_Manuscript_fromChain.m`.
 
-* **Spring_mass_Damper:** A script that will generate data for the mass-spring-damper system. In this file, you can set up the "true" parameters of the system, and simulate the oscillation of the mass over time. 
-
 #### **Also Included:**
 * Position data (with and without noise) used to track mass oscillations in MCMC and used for plotting.
-* Sample MCMC results `chain_20210526T111546` and `results_20210526T111546`.
+* Sample MCMC results `chain_20210526T111546.mat` and `results_20210526T111546.mat`.
 
 ## Arm_16_Model 
 This folder runs an MCMC analysis to find the plausible muscle forces for a elbow flexion model (`arm16_millard_rigidtendon.osim`) in OpenSim. This uses compact radial basis functions (CRBF's) to represent muscle excitations, that then get forward integrated using OpenSim to simulate the motion of the model during each iteration. 
