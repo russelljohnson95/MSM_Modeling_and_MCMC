@@ -25,9 +25,9 @@ This folder runs an MCMC analysis to recover the parameters of a mass-spring-dam
 
 ### Project Files Description
 
-* **Spring_mass_Damper_mcmc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
+* **Mass_Spring_Damper_mcmc_parallel:** This is the _main_ script that sets up and then calls the MCMC algorithm to run. It will also plot some of the results afterwards. 
 
-* **Spring_mass_Damper:** If you want to generate new reference data, this script that will generate kinematics for the mass-spring-damper system. In this script, you can set up the "true" parameters of the system, and simulate the oscillation of the mass over a set period of time. 
+* **Mass_Spring_Damper_Simulator:** If you want to generate new reference data, this script that will generate kinematics for the mass-spring-damper system. In this script, you can set up the "true" parameters of the system, and simulate the oscillation of the mass over a set period of time. 
 
 * **deriv:** A function that finds the derivative of a time series trajectory, used to find velocity from position data of the mass. 
 
