@@ -68,4 +68,4 @@ This folder runs an MCMC analysis to find the plausible muscle forces for a elbo
 
 * **arm16_pert4_:** Reference data for the MCMC analysis. 
 
-TODO: Not included (right now) are the sample data from the MCMC run for this project - the file size is too big for GitHub... 
+Not included (right now) are the sample data from the MCMC run for this project  
