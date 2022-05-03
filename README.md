@@ -3,6 +3,8 @@ This repository presents a workflow for performing Markov Chain Monte Carlo (MCM
 
 Last Updated: 5/2/2022; for questions email rtjohnso@usc.edu
 
+Johnson, R.T., Lakeland, D. & Finley, J.M. Using Bayesian inference to estimate plausible muscle forces in musculoskeletal models. J NeuroEngineering Rehabil 19, 34 (2022). https://doi.org/10.1186/s12984-022-01008-4
+
 ## Prerequisites
 This project _requires_ the appropriate set up of: 
 1. DRAM MCMC MATLAB Algorithm (see below)  
