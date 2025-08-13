@@ -1,7 +1,7 @@
 # MSM_Modeling_and_MCMC
 This repository presents a workflow for performing Markov Chain Monte Carlo (MCMC) analyses with OpenSim musculoskeletal models. It also includes an implementation of the MCMC algorithm with a mass-spring-damper model. 
 
-Last Updated: 5/2/2022; for questions email rtjohnso@usc.edu
+Last Updated: 5/2/2022; for questions email russell.johnson@northwestern.edu
 
 Johnson, R.T., Lakeland, D. & Finley, J.M. Using Bayesian inference to estimate plausible muscle forces in musculoskeletal models. J NeuroEngineering Rehabil 19, 34 (2022). https://doi.org/10.1186/s12984-022-01008-4
 
